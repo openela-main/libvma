@@ -1,0 +1,35 @@
+From 92f3868fd0474956afe6cb43f8de4d16abba83d6 Mon Sep 17 00:00:00 2001
+From: Iftah Levi <iftahl@nvidia.com>
+Date: Sun, 9 Jul 2023 14:08:44 +0300
+Subject: [PATCH] issue: 3525812 Fix buffer leak socketextreme
+
+In reclaim buffer api - vma_socketxtreme_free_vma_packets
+we use reclaim_recv_buffers method which uses try_lock
+on the ring, but in case the lock has failed - buffers
+will not be returned.
+The fix - in case the ring is locked - reclaim buffers
+to the global pool.
+
+Signed-off-by: Iftah Levi <iftahl@nvidia.com>
+---
+ src/vma/sock/sock-redirect.cpp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/src/vma/sock/sock-redirect.cpp b/src/vma/sock/sock-redirect.cpp
+index 4308d21e8478..9b232e6093ca 100644
+--- a/src/vma/sock/sock-redirect.cpp
++++ b/src/vma/sock/sock-redirect.cpp
+@@ -466,7 +466,9 @@ int vma_socketxtreme_free_vma_packets(struct vma_packet_desc_t *packets, int num
+ 					p_socket_object->free_buffs(packets[i].total_len);
+ 				}
+ 				if (rng) {
+-					rng->reclaim_recv_buffers(desc);
++					if (!rng->reclaim_recv_buffers(desc)) {
++					    g_buffer_pool_rx->put_buffers_thread_safe(desc);
++					}
+ 				} else {
+ 					goto err;
+ 				}
+-- 
+2.41.0
+
