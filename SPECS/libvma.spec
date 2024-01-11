@@ -1,13 +1,14 @@
 %{!?configure_options: %global configure_options %{nil}}
 
 Name: libvma
-Version: 9.6.4
-Release: 1%{?dist}
+Version: 9.8.20
+Release: 3%{?dist}
 Summary: A library for boosting TCP and UDP traffic (over RDMA hardware)
 
 License: GPLv2 or BSD
 Url: https://github.com/Mellanox/libvma
 Source0: https://github.com/Mellanox/libvma/archive/%{version}/%{name}-%{version}.tar.gz
+Patch0: 0001-issue-3525812-Fix-buffer-leak-socketextreme.patch
 
 # libvma currently supports only the following architectures
 ExclusiveArch: x86_64 ppc64le ppc64 aarch64
@@ -99,6 +100,23 @@ rm -f $RPM_BUILD_ROOT/%{_sysconfdir}/init.d/vma
 %{_mandir}/man8/vma_stats.*
 
 %changelog
+* Mon Jul 31 2023 Kamal Heib <kheib@redhat.com> - 9.8.20-3
+- Rebuilt for libvma-utils
+- Resolves: rhbz#2217883
+
+* Tue Jul 18 2023 Kamal Heib <kheib@redhat.com> - 9.8.20-2
+- Fix Socketxtreme buffer reclaim leak
+- Resolves: rhbz#2223720
+
+* Mon Jun 05 2023 Kamal Heib <kheib@redhat.com> - 9.8.20-1.1
+- Add gating tests
+- Resolves: rhbz#2170074
+
+* Thu Jun 01 2023 Kamal Heib <kheib@redhat.com> - 9.8.20-1
+- Update to upstream release 9.8.20.
+- Add gating tests
+- Resolves: rhbz#2170074
+
 * Wed Aug 17 2022 Michal Schmidt <mschmidt@redhat.com> - 9.6.4-1
 - Update to upstream release 9.6.4.
 - Resolves: rhbz#2049572
