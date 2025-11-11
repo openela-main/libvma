@@ -1,7 +1,7 @@
 %{!?configure_options: %global configure_options %{nil}}
 
 Name: libvma
-Version: 9.8.60
+Version: 9.8.71
 Release: 1%{?dist}
 Summary: A library for boosting TCP and UDP traffic (over RDMA hardware)
 
@@ -99,6 +99,10 @@ rm -f $RPM_BUILD_ROOT/%{_sysconfdir}/init.d/vma
 %{_mandir}/man8/vma_stats.*
 
 %changelog
+* Thu Jun 19 2025 Kamal Heib <kheib@redhat.com> - 9.8.71-1
+- Update to upstream release 9.8.71.
+- Resolves: RHEL-94446
+
 * Tue Nov 05 2024 Kamal Heib <kheib@redhat.com> - 9.8.60-1
 - Update to upstream release 9.8.60.
 - Resolves: RHEL-52882
