@@ -1,15 +1,13 @@
 %{!?configure_options: %global configure_options %{nil}}
 
 Name: libvma
-Version: 9.8.60
-Release: 3%{?dist}
+Version: 9.8.71
+Release: 1%{?dist}
 Summary: A library for boosting TCP and UDP traffic (over RDMA hardware)
 
 License: GPLv2 or BSD
 Url: https://github.com/Mellanox/libvma
 Source0: https://github.com/Mellanox/libvma/archive/%{version}/%{name}-%{version}.tar.gz
-Patch0: 0001-Fix-build-failure.patch
-Patch1: 0001-issue-4223310-VMA-support-for-kernel-6.10.patch
 
 # libvma currently supports only the following architectures
 ExclusiveArch: x86_64 ppc64le ppc64 aarch64
@@ -101,6 +99,10 @@ rm -f $RPM_BUILD_ROOT/%{_sysconfdir}/init.d/vma
 %{_mandir}/man8/vma_stats.*
 
 %changelog
+* Thu Jun 19 2025 Kamal Heib <kheib@redhat.com> - 9.8.71-1
+- Update to upstream release 9.8.71.
+- Resolves: RHEL-94484
+
 * Tue Jan 14 2025 Mohammad Heib <mheib@redhat.com> - 9.8.60-3
 - Fix a small memory leak and adjusted the code style. 
   Resolves: RHEL-24810
